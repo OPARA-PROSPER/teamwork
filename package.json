@@ -1,0 +1,45 @@
+{
+  "name": "teamwork",
+  "version": "1.0.0",
+  "description": "Teamwork is an ​ internal social network for employees of an organization. The goal of this",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js",
+    "test-init": "node node_modules/jasmine/bin/jasmine init",
+    "lint": "eslint --init"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OPARA-PROSPER/teamwork.git"
+  },
+  "keywords": [
+    "node",
+    "express",
+    "api",
+    "productivity"
+  ],
+  "author": "Opara Prosper",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/OPARA-PROSPER/teamwork/issues"
+  },
+  "homepage": "https://github.com/OPARA-PROSPER/teamwork#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "pg": "^7.12.1"
+  },
+  "devDependencies": {
+    "coveralls": "^3.0.7",
+    "eslint": "^6.6.0",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-react": "^7.16.0",
+    "eslint-plugin-react-hooks": "^1.7.0",
+    "jasmine": "^3.5.0",
+    "nodemon": "^1.19.4",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.5"
+  }
+}
