@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "nodemon server.js",
+    "test-init": "node node_modules/jasmine/bin/jasmine init",
     "lint": "eslint --init"
   },
   "repository": {
