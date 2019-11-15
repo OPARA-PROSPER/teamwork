@@ -6,7 +6,7 @@
   "scripts": {
     "start": "nodemon server.js",
     "test-init": "node node_modules/jasmine/bin/jasmine init",
-    "lint": "eslint --init"
+    "lint": "eslint ."
   },
   "repository": {
     "type": "git",
@@ -26,7 +26,9 @@
   "homepage": "https://github.com/OPARA-PROSPER/teamwork#readme",
   "dependencies": {
     "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
     "pg": "^7.12.1"
   },
   "devDependencies": {
