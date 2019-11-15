@@ -4,7 +4,7 @@
   "description": "Teamwork is an ​ internal social network for employees of an organization. The goal of this",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon server.js",
+    "start": "node server.js",
     "test-init": "node node_modules/jasmine/bin/jasmine init",
     "lint": "eslint ."
   },
