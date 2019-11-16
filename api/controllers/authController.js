@@ -28,10 +28,7 @@ exports.getUsers = (req, res) => {
       } else {
         res.status(200).json({
           status: 'success',
-          data: {
-            message: 'Query successful',
-            data: result.rows[0],
-          },
+          data: result.rows[0],
         });
       }
     });
