@@ -79,7 +79,7 @@ exports.createUSer = (req, res) => {
         data: {
           message: 'User account successfully created',
           token: req.headers.authorization,
-          userID: result.rows[0].id,
+          userEmail: result.rows[0].email,
         },
       });
     });
@@ -117,7 +117,7 @@ exports.signIn = (req, res) => {
         });
       } else {
         const token = jwt.sign(
-          { userID: result.rows[0].id },
+          { userEmail: result.rows[0].email },
           'TEAMWORK_SECRET_KEY',
           { expiresIn: '24h' },
         );
