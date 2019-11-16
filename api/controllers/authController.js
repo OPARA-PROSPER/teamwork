@@ -1,6 +1,40 @@
 const jwt = require('jsonwebtoken');
 const pool = require('../db/db');
 
+exports.getUsers = (req, res) => {
+  pool.connect((err, client, done) => {
+    if (err) {
+      res.status(400).json({
+        status: 'error',
+        err,
+      });
+    }
+
+    const query = 'SELECT * FROM users';
+
+    client.query(query, (error, result) => {
+      done();
+
+      if (error) {
+        res.status(400).json({
+          status: 'error',
+          error,
+        });
+      } else if (result.rows[0] === undefined) {
+        res.status(400).json({
+          status: 'error',
+          error: 'Bad request',
+        });
+      } else {
+        res.status(200).json({
+          status: 'success',
+          data: result.rows[0],
+        });
+      }
+    });
+  });
+};
+
 exports.createUSer = (req, res) => {
   const data = {
     firstName: req.body.firstname,
