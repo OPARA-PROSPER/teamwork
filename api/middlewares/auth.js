@@ -6,18 +6,18 @@ module.exports = (req, res, next) => {
 
     if (token) {
       const verifyToken = jwt.verify(token, 'TEAMWORK_SECRET_KEY');
-      const { userEmail } = verifyToken;
+      const { role } = verifyToken;
 
-      if (req.body.email && req.body.email !== userEmail) {
-        res.status(400).json({
+      if (role !== 'admin') {
+        res.status(403).json({
           status: 'error',
-          error: 'Invalid user email',
+          error: 'Bad request: you are not an admin',
         });
       } else {
         next();
       }
     } else {
-      res.status(403).json({
+      res.status(400).json({
         status: 'error',
         error: 'No authentication token supplied',
       });
