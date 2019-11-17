@@ -20,7 +20,7 @@ exports.getUsers = (req, res) => {
           status: 'error',
           error,
         });
-      } else if (result.rows[0] === undefined) {
+      } else if (result.rows === undefined) {
         res.status(400).json({
           status: 'error',
           error: 'Bad request',
@@ -28,7 +28,7 @@ exports.getUsers = (req, res) => {
       } else {
         res.status(200).json({
           status: 'success',
-          data: result.rows[0],
+          data: result.rows,
         });
       }
     });
@@ -67,21 +67,25 @@ exports.createUSer = (req, res) => {
     client.query(query, values, (error, result) => {
       done();
       if (error) {
-        console.log('There was an error: ', error);
         res.status(400).json({
           status: 'error',
-          error,
+          error: error,
+        });
+      } else if(result.rows[0] === undefined) {
+        res.status(403).json({
+          status: 'error',
+          error: 'Bad request',
+        });
+      } else {
+        res.status(200).json({
+          status: 'success',
+          data: {
+            message: 'User account successfully created',
+            token: req.headers.authorization,
+            userID: result.rows[0].id,
+          },
         });
       }
-
-      res.status(200).json({
-        status: 'success',
-        data: {
-          message: 'User account successfully created',
-          token: req.headers.authorization,
-          userEmail: result.rows[0].email,
-        },
-      });
     });
   });
 };
@@ -117,7 +121,7 @@ exports.signIn = (req, res) => {
         });
       } else {
         const token = jwt.sign(
-          { userEmail: result.rows[0].email },
+          { role: result.rows[0].jobrole },
           'TEAMWORK_SECRET_KEY',
           { expiresIn: '24h' },
         );
