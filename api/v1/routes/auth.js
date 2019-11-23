@@ -18,6 +18,6 @@ router.post('/auth/signin', authUserController.signIn);
 router.post('/articles', articlesController.postArticles);
 router.patch('/articles/:id', checkToken, articlesController.patchArticle);
 
-router.post('/gifs', gifsController.postGifs);
+router.post('/gifs', checkToken, gifsController.postGifs);
 
 module.exports = router;
