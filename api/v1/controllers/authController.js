@@ -208,47 +208,32 @@ exports.patchArticle = (req, res) => {
     const verifyToken = jwt.verify(token, 'TEAMWORK_SECRET_KEY');
     const { userID } = verifyToken;
     const query = 'SELECT * FROM articles WHERE id = $1';
-    // const query = 'UPDATE articles SET title = $1, article = $2 WHERE id = $3 RETURNING *';
-    // const data = [req.body.title, req.body.article, req.params.id];
+    const updateTable = 'UPDATE articles SET title = $1, article = $2 WHERE id = $3 RETURNING *';
+    const data = [req.body.title, req.body.article, req.params.id];
 
     client.query(query, [req.params.id], (error, result) => {
-      if (error) {
-        res.status(400).json({
-          status: 'error',
-          error: `There was an error ${error}`,
-        });
-      } else if (result.rows[0] === undefined) {
-        res.status(403).json({
-          status: 'error',
-          error: 'Bad request',
-        });
-      } else {
-        if (userID !== result.rows[0].id) {
-          res.status(403).json({
-            status: 'error',
-            error: 'You do not have the authorization to update this resource',
-          });
-        }
-
-        const q = 'UPDATE articles SET title = $1, article = $2 WHERE id = $3 RETURNING *';
-        const data = [req.body.title, req.body.article, req.params.id];
-        client.query(q, data, (e, r) => {
-          done();
-
-          if (e) {
+      if (result.rows[0].userid === userID) {
+        client.query(updateTable, data, (error, result) => {
+          if (error) {
             res.status(400).json({
               status: 'error',
-              error: `there was a qury error ${e}`,
+              error,
             });
           }
+
           res.status(200).json({
             status: 'success',
             data: {
-              message: 'Article successfully updated',
-              title: r.rows[0].title,
-              article: r.rows[0].article,
+              message: 'Article updated successfully',
+              title: result.rows[0].title,
+              article: result.rows[0].article,
             },
           });
+        });
+      } else {
+        res.status(403).json({
+          status: 'error',
+          error: 'You don\'t have the permission to update this resource',
         });
       }
     });
