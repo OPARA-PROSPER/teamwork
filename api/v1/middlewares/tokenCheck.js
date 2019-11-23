@@ -22,10 +22,10 @@ module.exports = (req, res, next) => {
         error: 'No authentication token supplied',
       });
     }
-  } catch (err) {
+  } catch (error) {
     res.status(401).json({
       status: 'error',
-      error: `You are not authorized: ${err}`,
+      error,
     });
   }
 };
