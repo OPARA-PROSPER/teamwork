@@ -19,7 +19,7 @@ module.exports = (req, res, next) => {
     } else {
       res.status(400).json({
         status: 'error',
-        error: 'No authentication token supplied',
+        error: 'Login to get an authentication token',
       });
     }
   } catch (err) {

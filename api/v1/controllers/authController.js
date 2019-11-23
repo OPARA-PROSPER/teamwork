@@ -78,7 +78,11 @@ exports.createUSer = (req, res) => {
         });
       } else {
         const token = jwt.sign(
-          { userID: result.rows[0].id, name: result.rows[0].firstName, role: result.rows[0].jobrole },
+          {
+            userID: result.rows[0].id,
+            name: result.rows[0].firstName,
+            role: result.rows[0].jobrole,
+          },
           'TEAMWORK_SECRET_KEY',
           { expiresIn: '24h' },
         );
@@ -127,7 +131,11 @@ exports.signIn = (req, res) => {
         });
       } else {
         const token = jwt.sign(
-          { userID: result.rows[0].id, name: result.rows[0].firstname, role: result.rows[0].jobrole },
+          {
+            userID: result.rows[0].id,
+            name: result.rows[0].firstname,
+            role: result.rows[0].jobrole,
+          },
           'TEAMWORK_SECRET_KEY',
           { expiresIn: '24h' },
         );
@@ -142,10 +150,6 @@ exports.signIn = (req, res) => {
       }
     });
   });
-};
-
-exports.postGifs = (req, res) => {
-  // code goes here
 };
 
 exports.postArticles = (req, res) => {
@@ -191,8 +195,47 @@ exports.postArticles = (req, res) => {
   });
 };
 
-// exports.patchArticle = (req, res) => {
-//   pool.connect((err, client, done) => {
+exports.patchArticle = (req, res) => {
+  pool.connect((err, client, done) => {
+    if (err) {
+      res.status(400).json({
+        status: 'error',
+        err,
+      });
+    }
 
-//   })
+    const token = req.headers.authorization;
+    const verifyToken = jwt.verify(token, 'TEAMWORK_SECRET_KEY');
+    const { userID } = verifyToken;
+    const query = 'SELECT * FROM articles WHERE id = $1';
+    const updateTable = 'UPDATE articles SET title = $1, article = $2 WHERE id = $3 RETURNING *';
+    const data = [req.body.title, req.body.article, req.params.id];
+
+    client.query(query, [req.params.id], (error, result) => {
+      if (result.rows[0].userid === userID) {
+        client.query(updateTable, data, (error, result) => {
+          if (error) {
+            res.status(400).json({
+              status: 'error',
+              error,
+            });
+          }
+
+          res.status(200).json({
+            status: 'success',
+            data: {
+              message: 'Article updated successfully',
+              title: result.rows[0].title,
+              article: result.rows[0].article,
+            },
+          });
+        });
+      } else {
+        res.status(403).json({
+          status: 'error',
+          error: 'You don\'t have the permission to update this resource',
+        });
+      }
+    });
+  });
 };
