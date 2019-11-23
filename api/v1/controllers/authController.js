@@ -213,6 +213,7 @@ exports.patchArticle = (req, res) => {
 
     client.query(query, [req.params.id], (error, result) => {
       if (result.rows[0].userid === userID) {
+        // eslint-disable-next-line no-shadow
         client.query(updateTable, data, (error, result) => {
           if (error) {
             res.status(400).json({
