@@ -33,14 +33,14 @@ exports.postGifs = (req, res) => {
       }
       const query = 'INSERT INTO gifs(title, image_url) VALUES ($1, $2) RETURNING *';
       const data = [req.body.title, result.url];
-      client.query(query, data, (error, result) => {
+      client.query(query, data, (queryError, queryResult) => {
         done();
         if (error) {
           res.status(403).json({
             status: 'error',
-            error,
+            error: queryError,
           });
-        } else if (result.rows[0] === undefined) {
+        } else if (queryResult.rows[0] === undefined) {
           res.status(400).json({
             status: 'error',
             error: 'Bad request',
@@ -49,11 +49,11 @@ exports.postGifs = (req, res) => {
           res.status(200).json({
             status: 'success',
             data: {
-              gifId: result.rows[0].id,
+              gifId: queryResult.rows[0].id,
               message: 'Gif image successfully uploaded',
-              createdOn: result.rows[0].created_on,
-              title: result.rows[0].title,
-              imageUrl: result.rows[0].image_url,
+              createdOn: queryResult.rows[0].created_on,
+              title: queryResult.rows[0].title,
+              imageUrl: queryResult.rows[0].image_url,
             },
           });
         }
