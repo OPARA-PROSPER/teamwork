@@ -10,8 +10,6 @@ cloudinary.config({
 });
 
 exports.postGifs = (req, res) => {
-  // add code
-
   cloudinary.uploader.upload(req.body.image, (error, result) => {
     if (error) {
       res.status(400).json({
@@ -58,6 +56,52 @@ exports.postGifs = (req, res) => {
           });
         }
       });
+    });
+  });
+};
+
+exports.deleteGifs = (req, res) => {
+  pool.connect((error, client, done) => {
+    if (error) {
+      res.status(200).json({
+        status: 'error',
+        error,
+      });
+    }
+
+    const query = 'SELECT * FROM gifs WHERE id=$1';
+    const deleteGifs = 'DELETE FROM gifs WHERE id=$1 AND user_id=$1';
+
+    client.query(query, [req.params.id], (queryError, result) => {
+      if (queryError) {
+        res.status(400).json({
+          status: 'error',
+          error: queryError,
+        });
+      } else if (result.rows[0] === undefined) {
+        res.status(400).json({
+          status: 'error',
+          error: 'Resource not found',
+        });
+      } else {
+        client.query(deleteGifs, [result.rows[0].id, req.params.id], (deleteGifsError) => {
+          done();
+
+          if (deleteGifsError) {
+            res.status(400).json({
+              status: 'error',
+              error: deleteGifsError,
+            });
+          } else {
+            res.status(200).json({
+              status: 'success',
+              data: {
+                message: 'gif post successfully deleted',
+              },
+            });
+          }
+        });
+      }
     });
   });
 };
