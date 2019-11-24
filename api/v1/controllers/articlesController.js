@@ -90,3 +90,58 @@ exports.patchArticle = (req, res) => {
     });
   });
 };
+
+exports.deleteArticle = (req, res) => {
+  pool.connect((error, client, done) => {
+    if (error) {
+      res.status(400).json({
+        status: 'error',
+        error,
+      });
+    }
+
+    const token = req.headers.authorization;
+    const verifyToken = jwt.verify(token, 'TEAMWORK_SECRET_KEY');
+    const { userID } = verifyToken;
+    const query = 'SELECT * from articles WHERE id=$1';
+    const deleteArticle = 'DELETE FROM articles WHERE id=$1 AND userid=$2';
+
+    client.query(query, [req.params.id], (queryError, result) => {
+      if (queryError) {
+        res.status(400).json({
+          status: 'error',
+          error: queryError,
+        });
+      } else if (result.rows[0] === undefined) {
+        res.status(400).json({
+          status: 'error',
+          error: 'The resource not found',
+        });
+      } else if (result.rows[0].userid === userID) {
+        client.query(deleteArticle,
+          [req.params.id, userID],
+          (deleteQueryError) => {
+            done();
+            if (deleteQueryError) {
+              res.status(400).json({
+                status: 'error',
+                error: deleteQueryError,
+              });
+            } else {
+              res.status(200).json({
+                status: 'success',
+                data: {
+                  message: 'Article successfully deleted',
+                },
+              });
+            }
+          });
+      } else {
+        res.status(400).json({
+          status: 'error',
+          error: 'You don\'t have the permission to delete this resource',
+        });
+      }
+    });
+  });
+};
