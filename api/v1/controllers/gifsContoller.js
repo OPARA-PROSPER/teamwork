@@ -1,5 +1,5 @@
 require('dotenv').config();
-// const jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 const cloudinary = require('cloudinary').v2;
 const pool = require('../db/db');
 
@@ -22,6 +22,11 @@ exports.postGifs = (req, res) => {
         error: 'Cloudinary could not upload the image',
       });
     }
+
+    const token = req.headers.authorization;
+    const verifyToken = jwt.verify(token, 'TEAMWORK_SECRET_KEY');
+    const { userID } = verifyToken;
+
     pool.connect((err, client, done) => {
       if (error) {
         res.status(400).json({
@@ -29,8 +34,8 @@ exports.postGifs = (req, res) => {
           error: err,
         });
       }
-      const query = 'INSERT INTO gifs(title, image_url) VALUES ($1, $2) RETURNING *';
-      const data = [req.body.title, result.url];
+      const query = 'INSERT INTO gifs(title, image_url, user_id) VALUES ($1, $2, $3) RETURNING *';
+      const data = [req.body.title, result.url, userID];
       client.query(query, data, (queryError, queryResult) => {
         done();
         if (error) {
@@ -63,14 +68,17 @@ exports.postGifs = (req, res) => {
 exports.deleteGifs = (req, res) => {
   pool.connect((error, client, done) => {
     if (error) {
-      res.status(200).json({
+      res.status(400).json({
         status: 'error',
         error,
       });
     }
 
+    const token = req.headers.authorization;
+    const verifyToken = jwt.verify(token, 'TEAMWORK_SECRET_KEY');
+    const { userID } = verifyToken;
     const query = 'SELECT * FROM gifs WHERE id=$1';
-    const deleteGifs = 'DELETE FROM gifs WHERE id=$1 AND user_id=$1';
+    const deleteGifs = 'DELETE FROM gifs WHERE id=$1 AND user_id=$2';
 
     client.query(query, [req.params.id], (queryError, result) => {
       if (queryError) {
@@ -84,13 +92,13 @@ exports.deleteGifs = (req, res) => {
           error: 'Resource not found',
         });
       } else {
-        client.query(deleteGifs, [result.rows[0].id, req.params.id], (deleteGifsError) => {
+        client.query(deleteGifs, [result.rows[0].id, userID], (deleteGifsError) => {
           done();
 
           if (deleteGifsError) {
             res.status(400).json({
               status: 'error',
-              error: deleteGifsError,
+              error: `there was an error ${deleteGifsError}`,
             });
           } else {
             res.status(200).json({
