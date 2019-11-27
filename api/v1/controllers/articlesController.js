@@ -1,6 +1,38 @@
 const jwt = require('jsonwebtoken');
 const pool = require('../db/db');
 
+exports.getArticles = (req, res) => {
+  pool.connect((error, client, done) => {
+    if (error) {
+      res.status(400).json({
+        status: 'error',
+        error,
+      });
+    }
+
+    const query = 'SELECT * FROM articles ORDER BY id ASC';
+
+    client.query(query, (queryError, result) => {
+      if (queryError) {
+        res.status(400).json({
+          status: 'error',
+          error: queryError,
+        });
+      } else if (result.rows === undefined) {
+        res.status(400).json({
+          status: 'error',
+          error: 'resource not found',
+        });
+      } else {
+        res.status(200).json({
+          status: 'success',
+          data: result.rows,
+        });
+      }
+    });
+  });
+};
+
 exports.postArticles = (req, res) => {
   pool.connect((err, client, done) => {
     if (err) {
