@@ -113,3 +113,51 @@ exports.deleteGifs = (req, res) => {
     });
   });
 };
+
+exports.commentGifs = (req, res) => {
+  pool.connect((error, client, done) => {
+    const getGif = 'SELECT title FROM gifs WHERE id=$1';
+    const gifComment = 'INSERT INTO gif_comments(comment, gif_id) VALUES($1, $2) RETURNING *';
+
+    client.query(getGif, [req.params.id], (getGifError, result) => {
+      if (getGifError) {
+        res.status(400).json({
+          status: 'error',
+          error: `could not get Gif article: ${getGifError}`,
+        });
+      } else if (result.rows[0] === undefined) {
+        res.status(400).json({
+          status: 'error',
+          error: 'Could not gif id',
+        });
+      }
+
+      client.query(gifComment,
+        [req.body.comment, req.params.id],
+        (gifCommentError, gifCommentResult) => {
+          done();
+          if (gifCommentError) {
+            res.status(400).json({
+              status: 'error',
+              error: `Could not save the comment: ${gifCommentError}`,
+            });
+          } else if (gifCommentResult.rows[0] === undefined) {
+            res.status(400).json({
+              status: 'error',
+              error: 'The resources could not be fetched',
+            });
+          } else {
+            res.status(200).json({
+              status: 'success',
+              data: {
+                message: 'comment successfully created',
+                createdOn: gifCommentResult.rows[0].created_on,
+                gifTitle: result.rows[0].title,
+                comment: gifCommentResult.rows[0].comment,
+              },
+            });
+          }
+        });
+    });
+  });
+};
