@@ -18,6 +18,7 @@ router.post('/auth/signin', authUserController.signIn);
 router.post('/articles', articlesController.postArticles);
 router.patch('/articles/:id', checkToken, articlesController.patchArticle);
 router.delete('/articles/:id', checkToken, articlesController.deleteArticle);
+router.post('/articles/:id/comment', checkToken, articlesController.commentArticle);
 
 router.post('/gifs', checkToken, gifsController.postGifs);
 router.delete('/gifs/:id', checkToken, gifsController.deleteGifs);
