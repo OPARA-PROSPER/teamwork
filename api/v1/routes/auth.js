@@ -22,5 +22,6 @@ router.post('/articles/:id/comment', checkToken, articlesController.commentArtic
 
 router.post('/gifs', checkToken, gifsController.postGifs);
 router.delete('/gifs/:id', checkToken, gifsController.deleteGifs);
+router.post('/gifs/:id/comment', checkToken, gifsController.commentGifs);
 
 module.exports = router;
