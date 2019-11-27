@@ -145,3 +145,47 @@ exports.deleteArticle = (req, res) => {
     });
   });
 };
+
+exports.commentArticle = (req, res) => {
+  pool.connect((error, client, done) => {
+    const query = 'INSERT INTO article_comments(comment, article_id) VALUES ($1, $2) RETURNING *';
+    const getArticle = 'SELECT title, article FROM articles WHERE id=$1';
+    const data = [req.body.comment, req.params.id];
+
+    client.query(getArticle, [req.params.id], (getArticleQueryError, result) => {
+      if (getArticleQueryError) {
+        res.status(400).json({
+          status: 'error',
+          error: `Could not find resource ${getArticleQueryError}`,
+        });
+      }
+
+      client.query(query, data, (queryError, queryResult) => {
+        done();
+
+        if (queryError) {
+          res.status(400).json({
+            status: 'error',
+            error: queryError,
+          });
+        } else if (queryResult.rows[0] === undefined) {
+          res.status(400).json({
+            status: 'error',
+            error: 'could not inssert data into the database',
+          });
+        } else {
+          res.status(200).json({
+            status: 'success',
+            data: {
+              message: 'comment successfully created',
+              createdOn: queryResult.rows[0].created_on,
+              articleTitle: result.rows[0].title,
+              article: result.rows[0].article,
+              comment: queryResult.rows[0].comment,
+            },
+          });
+        }
+      });
+    });
+  });
+};
