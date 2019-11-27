@@ -13,6 +13,7 @@ exports.getArticles = (req, res) => {
     const query = 'SELECT * FROM articles ORDER BY id ASC';
 
     client.query(query, (queryError, result) => {
+      done();
       if (queryError) {
         res.status(400).json({
           status: 'error',
