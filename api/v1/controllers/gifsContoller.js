@@ -172,7 +172,7 @@ exports.deleteGifs = (req, res) => {
 exports.commentGifs = (req, res) => {
   pool.connect((error, client, done) => {
     const getGif = 'SELECT title FROM gifs WHERE id=$1';
-    const gifComment = 'INSERT INTO gif_comments(comment, gif_id) VALUES($1, $2) RETURNING *';
+    const gifComment = 'INSERT INTO gif_comments(comment, gif_id, author_id) VALUES($1, $2, $3) RETURNING *';
 
     client.query(getGif, [req.params.id], (getGifError, result) => {
       if (getGifError) {
@@ -187,8 +187,12 @@ exports.commentGifs = (req, res) => {
         });
       }
 
+      const token = req.headers.authorization;
+      const verifyToken = jwt.verify(token, 'TEAMWORK_SECRET_KEY');
+      const { userID } = verifyToken;
+
       client.query(gifComment,
-        [req.body.comment, req.params.id],
+        [req.body.comment, req.params.id, userID],
         (gifCommentError, gifCommentResult) => {
           done();
           if (gifCommentError) {
