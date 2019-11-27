@@ -9,6 +9,61 @@ cloudinary.config({
   api_secret: process.env.API_SECRET,
 });
 
+exports.getGifById = (req, res) => {
+  pool.connect((error, client, done) => {
+    if (error) {
+      res.status(400).json({
+        status: 'error',
+        error,
+      });
+    }
+
+    const query = 'SELECT id,title,image_url,created_on FROM gifs WHERE id=$1';
+    const getGif = 'SELECT id,comment,author_id FROM gif_comments WHERE gif_id=$1';
+    client.query(query, [req.params.id], (queryError, result) => {
+      // done();
+      if (queryError) {
+        res.status(400).status({
+          status: 'error',
+          error: `There was an error: ${queryError}`,
+        });
+      } else if (result.rows[0] === undefined) {
+        res.status(400).json({
+          status: 'error',
+          error: 'Gif not found',
+        });
+      } else {
+        client.query(getGif, [result.rows[0].id], (getGifError, getGifResult) => {
+          done();
+
+          if (getGifError) {
+            res.status(400).json({
+              status: 'error',
+              error: getGifError,
+            });
+          } else if (getGifResult.rows[0] === undefined) {
+            res.status(400).json({
+              status: 'error',
+              error: 'Gif comment not found',
+            });
+          } else {
+            res.status(200).json({
+              status: 'success',
+              data: {
+                id: result.rows[0].id,
+                createdOn: result.rows[0].createdat,
+                title: result.rows[0].title,
+                url: result.rows[0].image_url,
+                comments: getGifResult.rows,
+              },
+            });
+          }
+        });
+      }
+    });
+  });
+};
+
 exports.postGifs = (req, res) => {
   cloudinary.uploader.upload(req.body.image, (error, result) => {
     if (error) {
