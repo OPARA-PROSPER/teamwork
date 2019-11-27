@@ -34,6 +34,61 @@ exports.getArticles = (req, res) => {
   });
 };
 
+exports.getArticleById = (req, res) => {
+  pool.connect((error, client, done) => {
+    if (error) {
+      res.status(400).json({
+        status: 'error',
+        error,
+      });
+    }
+
+    const query = 'SELECT id,title,article,createdat FROM articles WHERE id=$1';
+    const getComment = 'SELECT id,comment,author_id FROM article_comments WHERE article_id=$1';
+    client.query(query, [req.params.id], (queryError, result) => {
+      // done();
+      if (queryError) {
+        res.status(400).status({
+          status: 'error',
+          error: `There was an error: ${queryError}`,
+        });
+      } else if (result.rows[0] === undefined) {
+        res.status(400).json({
+          status: 'error',
+          error: 'Article not found',
+        });
+      } else {
+        client.query(getComment, [result.rows[0].id], (getCommentError, getCommentResult) => {
+          done();
+
+          if (getCommentError) {
+            res.status(400).json({
+              status: 'error',
+              error: getCommentError,
+            });
+          } else if (getCommentResult.rows[0] === undefined) {
+            res.status(400).json({
+              status: 'error',
+              error: 'Article comment not found',
+            });
+          } else {
+            res.status(200).json({
+              status: 'success',
+              data: {
+                id: result.rows[0].id,
+                createdOn: result.rows[0].createdat,
+                title: result.rows[0].title,
+                article: result.rows[0].article,
+                comments: getCommentResult.rows,
+              },
+            });
+          }
+        });
+      }
+    });
+  });
+};
+
 exports.postArticles = (req, res) => {
   pool.connect((err, client, done) => {
     if (err) {
@@ -181,9 +236,7 @@ exports.deleteArticle = (req, res) => {
 
 exports.commentArticle = (req, res) => {
   pool.connect((error, client, done) => {
-    const query = 'INSERT INTO article_comments(comment, article_id) VALUES ($1, $2) RETURNING *';
     const getArticle = 'SELECT title, article FROM articles WHERE id=$1';
-    const data = [req.body.comment, req.params.id];
 
     client.query(getArticle, [req.params.id], (getArticleQueryError, result) => {
       if (getArticleQueryError) {
@@ -192,6 +245,12 @@ exports.commentArticle = (req, res) => {
           error: `Could not find resource ${getArticleQueryError}`,
         });
       }
+
+      const token = req.headers.authorization;
+      const verifyToken = jwt.verify(token, 'TEAMWORK_SECRET_KEY');
+      const { userID } = verifyToken;
+      const query = 'INSERT INTO article_comments(comment, article_id, author_id) VALUES ($1, $2, $3) RETURNING *';
+      const data = [req.body.comment, req.params.id, userID];
 
       client.query(query, data, (queryError, queryResult) => {
         done();
