@@ -144,12 +144,22 @@ exports.patchArticle = (req, res) => {
     const token = req.headers.authorization;
     const verifyToken = jwt.verify(token, 'TEAMWORK_SECRET_KEY');
     const { userID } = verifyToken;
-    const query = 'SELECT * FROM articles WHERE id = $1';
+    const query = 'SELECT * FROM articles WHERE id=$1';
     const updateTable = 'UPDATE articles SET title = $1, article = $2 WHERE id = $3 RETURNING *';
     const data = [req.body.title, req.body.article, req.params.id];
 
-    client.query(query, [req.params.id], (error, result) => {
-      if (result.rows[0].userid === userID) {
+    client.query(query, [req.params.id], (queryError, result) => {
+      if (queryError) {
+        res.status(400).json({
+          status: 'error',
+          error: `${queryError}`,
+        });
+      } else if (result.rows[0] === undefined) {
+        res.status(400).json({
+          status: 'error',
+          error: 'Article does not exits',
+        });
+      } else if (result.rows[0].userid === userID) {
         // eslint-disable-next-line no-shadow
         client.query(updateTable, data, (error, result) => {
           done();
