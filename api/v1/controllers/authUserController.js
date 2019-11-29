@@ -2,34 +2,18 @@ const jwt = require('jsonwebtoken');
 const pool = require('../db/db');
 
 exports.getUsers = (req, res) => {
-  pool.connect((err, client, done) => {
-    if (err) {
-      res.status(400).json({
-        status: 'error',
-        err,
-      });
-    }
+  pool.connect((error, client, done) => {
+    if (error) return res.status(400).json({ status: 'error', error });
 
     const query = 'SELECT * FROM users';
 
-    client.query(query, (error, result) => {
+    client.query(query, (queryError, result) => {
       done();
-
-      if (error) {
-        res.status(400).json({
-          status: 'error',
-          error,
-        });
-      } else if (result.rows === undefined) {
-        res.status(400).json({
-          status: 'error',
-          error: 'Bad request',
-        });
+      if (queryError) return res.status(400).json({ status: 'error', error: `${queryError}` });
+      if (result.rows.length === 0) {
+        res.status(400).json({ status: 'error', error: 'Bad request' });
       } else {
-        res.status(200).json({
-          status: 'success',
-          data: result.rows,
-        });
+        res.status(200).json({ status: 'success', data: result.rows });
       }
     });
   });
@@ -47,12 +31,11 @@ exports.createUSer = (req, res) => {
     address: req.body.address,
   };
 
-  pool.connect((err, client, done) => {
-    if (err) {
-      console.log('Unable to connect to the database: ', err);
+  pool.connect((error, client, done) => {
+    if (error) {
       res.status(400).send({
         status: 'error',
-        err,
+        error: `${error}`,
       });
     }
 
@@ -64,24 +47,17 @@ exports.createUSer = (req, res) => {
       data.department, data.address,
     ];
 
-    client.query(query, values, (error, result) => {
+    client.query(query, values, (queryError, queryResult) => {
       done();
-      if (error) {
-        res.status(400).json({
-          status: 'error',
-          error,
-        });
-      } else if (result.rows[0] === undefined) {
-        res.status(403).json({
-          status: 'error',
-          error: 'Bad request',
-        });
+      if (queryError) return res.status(400).json({ status: 'error', error: `${queryError}` });
+      if (queryResult.rows.length === 0) {
+        res.status(400).json({ status: 'error', error: 'Bad request' });
       } else {
         const token = jwt.sign(
           {
-            userID: result.rows[0].id,
-            name: result.rows[0].firstName,
-            role: result.rows[0].jobrole,
+            userID: queryResult.rows[0].id,
+            name: queryResult.rows[0].firstName,
+            role: queryResult.rows[0].jobrole,
           },
           'TEAMWORK_SECRET_KEY',
           { expiresIn: '24h' },
@@ -92,7 +68,7 @@ exports.createUSer = (req, res) => {
           data: {
             message: 'User account successfully created',
             token,
-            userID: result.rows[0].id,
+            userID: queryResult.rows[0].id,
           },
         });
       }
@@ -101,51 +77,35 @@ exports.createUSer = (req, res) => {
 };
 
 exports.signIn = (req, res) => {
-  pool.connect((err, client, done) => {
-    if (err) {
-      console.log('Unable to connect to the database: ', err);
-      res.status(400).send({
-        status: 'error',
-        error: err,
-      });
-    }
+  if (Object.keys(req.body).length === 0) return res.status(404).json({ status: 'error', error: 'empty request bidy' });
 
-    const query = 'SELECT * FROM users WHERE email=$1 AND password=$2';
-    const data = {
-      email: req.body.email,
-      password: req.body.password,
-    };
+  pool.connect((error, client, done) => {
+    if (error) res.status(400).send({ status: 'error', error });
 
-    client.query(query, [data.email, data.password], (error, result) => {
+    const query = 'SELECT id,firstname,jobrole FROM users WHERE email=$1 AND password=$2';
+    const data = { email: req.body.email, password: req.body.password };
+
+    client.query(query, [data.email, data.password], (queryError, queryResult) => {
       done();
 
-      if (error) {
-        res.status(400).json({
+      if (queryError) res.status(400).json({ status: 'error', error: `${queryError}` });
+      if (queryResult.rows.length === 0) {
+        res.status(404).json({
           status: 'error',
-          error,
-        });
-      } else if (result.rows[0] === undefined) {
-        res.status(400).json({
-          status: 'error',
-          error: 'Bad request',
+          error: 'user not found: incorrect email or password',
         });
       } else {
-        const token = jwt.sign(
-          {
-            userID: result.rows[0].id,
-            name: result.rows[0].firstname,
-            role: result.rows[0].jobrole,
-          },
-          'TEAMWORK_SECRET_KEY',
-          { expiresIn: '24h' },
-        );
+        const token = jwt.sign({
+          userID: queryResult.rows[0].id,
+          name: queryResult.rows[0].firstname,
+          role: queryResult.rows[0].jobrole,
+        },
+        'TEAMWORK_SECRET_KEY',
+        { expiresIn: '24h' });
 
         res.status(200).json({
           status: 'success',
-          data: {
-            token,
-            userID: result.rows[0].id,
-          },
+          data: { token, userID: queryResult.rows[0].id },
         });
       }
     });
