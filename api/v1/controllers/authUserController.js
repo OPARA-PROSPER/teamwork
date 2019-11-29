@@ -39,7 +39,7 @@ exports.createUSer = (req, res) => {
       });
     }
 
-    const query = 'INSERT INTO users(firstname, lastname, email, password, gender, jobrole, department, address) VALUES($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *';
+    const query = 'INSERT INTO users(firstname, lastname, email, password, gender, jobrole, department, address) VALUES($1,$2,$3,$4,$5,$6,$7,$8) RETURNING id, firstname, jobrole';
     const values = [
       data.firstName, data.lastName,
       data.email, data.password,
@@ -56,7 +56,7 @@ exports.createUSer = (req, res) => {
         const token = jwt.sign(
           {
             userID: queryResult.rows[0].id,
-            name: queryResult.rows[0].firstName,
+            name: queryResult.rows[0].firstname,
             role: queryResult.rows[0].jobrole,
           },
           'TEAMWORK_SECRET_KEY',
