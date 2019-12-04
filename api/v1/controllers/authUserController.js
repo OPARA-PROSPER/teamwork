@@ -10,12 +10,11 @@ exports.getUsers = (req, res) => {
     client.query(query, (queryError, result) => {
       done();
       if (queryError) return res.status(400).json({ status: 'error', error: `${queryError}` });
-      if (result.rows.length === 0) {
-        res.status(400).json({ status: 'error', error: 'Bad request' });
-      } else {
-        res.status(200).json({ status: 'success', data: result.rows });
-      }
+      if (result.rows.length === 0) return res.status(404).json({ status: 'error', error: 'Bad request' });
+
+      return res.status(200).json({ status: 'success', data: result.rows });
     });
+    return null;
   });
 };
 
@@ -50,28 +49,26 @@ exports.createUSer = (req, res) => {
     client.query(query, values, (queryError, queryResult) => {
       done();
       if (queryError) return res.status(400).json({ status: 'error', error: `${queryError}` });
-      if (queryResult.rows.length === 0) {
-        res.status(400).json({ status: 'error', error: 'Bad request' });
-      } else {
-        const token = jwt.sign(
-          {
-            userID: queryResult.rows[0].id,
-            name: queryResult.rows[0].firstname,
-            role: queryResult.rows[0].jobrole,
-          },
-          'TEAMWORK_SECRET_KEY',
-          { expiresIn: '24h' },
-        );
+      if (queryResult.rows.length === 0) return res.status(400).json({ status: 'error', error: 'Bad request' });
 
-        res.status(200).json({
-          status: 'success',
-          data: {
-            message: 'User account successfully created',
-            token,
-            userID: queryResult.rows[0].id,
-          },
-        });
-      }
+      const token = jwt.sign(
+        {
+          userID: queryResult.rows[0].id,
+          name: queryResult.rows[0].firstname,
+          role: queryResult.rows[0].jobrole,
+        },
+        'TEAMWORK_SECRET_KEY',
+        { expiresIn: '24h' },
+      );
+
+      return res.status(200).json({
+        status: 'success',
+        data: {
+          message: 'User account successfully created',
+          token,
+          userID: queryResult.rows[0].id,
+        },
+      });
     });
   });
 };
@@ -89,25 +86,22 @@ exports.signIn = (req, res) => {
       done();
 
       if (queryError) return res.status(400).json({ status: 'error', error: `${queryError}` });
-      if (queryResult.rows.length === 0) {
-        res.status(404).json({
-          status: 'error',
-          error: 'user not found: incorrect email or password',
-        });
-      } else {
-        const token = jwt.sign({
-          userID: queryResult.rows[0].id,
-          name: queryResult.rows[0].firstname,
-          role: queryResult.rows[0].jobrole,
-        },
-        'TEAMWORK_SECRET_KEY',
-        { expiresIn: '24h' });
+      if (queryResult.rows.length === 0) return res.status(404).json({ status: 'error', error: 'user not found: incorrect email or password' });
 
-        res.status(200).json({
-          status: 'success',
-          data: { token, userID: queryResult.rows[0].id },
-        });
-      }
+      const token = jwt.sign({
+        userID: queryResult.rows[0].id,
+        name: queryResult.rows[0].firstname,
+        role: queryResult.rows[0].jobrole,
+      },
+      'TEAMWORK_SECRET_KEY',
+      { expiresIn: '24h' });
+
+      return res.status(200).json({
+        status: 'success',
+        data: { token, userID: queryResult.rows[0].id },
+      });
     });
   });
+
+  return null;
 };
