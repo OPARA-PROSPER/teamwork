@@ -88,7 +88,7 @@ exports.signIn = (req, res) => {
     client.query(query, [data.email, data.password], (queryError, queryResult) => {
       done();
 
-      if (queryError) res.status(400).json({ status: 'error', error: `${queryError}` });
+      if (queryError) return res.status(400).json({ status: 'error', error: `${queryError}` });
       if (queryResult.rows.length === 0) {
         res.status(404).json({
           status: 'error',
