@@ -14,7 +14,6 @@ exports.getUsers = (req, res) => {
 
       return res.status(200).json({ status: 'success', data: result.rows });
     });
-    return null;
   });
 };
 
@@ -102,6 +101,4 @@ exports.signIn = (req, res) => {
       });
     });
   });
-
-  return null;
 };
