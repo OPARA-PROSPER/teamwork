@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "test-init": "node node_modules/jasmine/bin/jasmine init",
-    "test": "node node_modules/jasmine/bin/jasmine",
+    "test": "jasmine",
     "lint": "eslint ."
   },
   "repository": {
