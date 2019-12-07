@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "test-init": "node node_modules/jasmine/bin/jasmine init",
-    "test": "jasmine",
+    "test": "istanbul cover jasmine",
     "lint": "eslint .",
     "coveralls": "cat ./coverage/lcov.info | node node_modules/.bin/coveralls"
   },
@@ -43,7 +43,9 @@
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.16.0",
     "eslint-plugin-react-hooks": "^1.7.0",
+    "istanbul": "^0.4.5",
     "nodemon": "^1.19.4",
+    "nyc": "^14.1.1",
     "request": "^2.88.0",
     "request-promise": "^4.2.5"
   },
