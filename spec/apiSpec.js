@@ -8,9 +8,9 @@ describe('Api', () => {
   // let server;
 
   // beforeAll((done) => {
-    // server = express();
-    // server.listen(4000, () => 'server is listening');
-    // done();
+  // server = express();
+  // server.listen(4000, () => 'server is listening');
+  // done();
   // });
 
   describe('client request to get all users', () => {
