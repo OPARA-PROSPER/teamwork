@@ -22,7 +22,7 @@ describe('Api', () => {
     });
 
     it('with an admin token should return a status code of 200', (done) => {
-      request({ url, headers: { Authorization: process.env.ADMIN_TOKEN } }, (error, response) => {
+      request({ url, headers: { Authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjEsIm5hbWUiOiJvYmltbWEiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE1NzU2OTU1ODAsImV4cCI6MTU3NTc4MTk4MH0.wHhN1JgsD1fyfsQQfYDhWy7psOGA9Rn4-buocXfioIE' } }, (error, response) => {
         expect(response.statusCode).toBe(200);
         done();
       });
