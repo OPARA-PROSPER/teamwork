@@ -41,11 +41,14 @@ const errorHandler = (error) => {
 };
 
 server.on('error', errorHandler);
-server.on('listening', () => {
+module.exports = server.on('listening', () => {
   const address = server.address();
   const bind = typeof address === 'string' ? `pipe ${address}` : `port ${port}`;
   console.log(`Listening on ${bind}`);
+  return `Listening on ${bind}`;
 });
 
 
 server.listen(process.env.PORT || 3000);
+
+// module.exports = { server };
