@@ -4,7 +4,7 @@ const request = require('request');
 // const express = require('express');
 
 describe('Api', () => {
-  const url = 'https://29f0584e.ngrok.io/api/v1/auth';
+  const url = 'https://85b6da38.ngrok.io/api/v1/auth';
   // let server;
 
   // beforeAll((done) => {
