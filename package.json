@@ -8,7 +8,7 @@
     "test-init": "node node_modules/jasmine/bin/jasmine init",
     "test": "jasmine",
     "lint": "eslint .",
-    "coverage": "cat ./coverage/lcov.info | node node_modules/.bin/coveralls"
+    "coveralls": "cat ./coverage/lcov.info | node node_modules/.bin/coveralls"
   },
   "repository": {
     "type": "git",
