@@ -34,8 +34,7 @@ describe('Api', () => {
         (error, response, body) => {
           expect(JSON.parse(body).status).toBe('success');
           done();
-        },
-      );
+        });
     });
   });
 });
