@@ -30,7 +30,7 @@ describe('Api', () => {
 
     it('with an admin token should return a status of success', (done) => {
       request(
-        { url, headers: { Authorization: process.env.ADMIN_TOKEN } },
+        { url, headers: { Authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjEsIm5hbWUiOiJvYmltbWEiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE1NzU2OTU1ODAsImV4cCI6MTU3NTc4MTk4MH0.wHhN1JgsD1fyfsQQfYDhWy7psOGA9Rn4-buocXfioIE' } },
         (error, response, body) => {
           expect(JSON.parse(body).status).toBe('success');
           done();
