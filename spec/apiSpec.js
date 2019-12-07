@@ -1,20 +1,16 @@
 /* eslint-disable no-undef */
 require('dotenv').config();
 const request = require('request');
+// const express = require('express');
 
 describe('Api', () => {
-  const url = 'http://localhost:3000/api/v1/auth';
+  const url = 'https://29f0584e.ngrok.io/api/v1/auth';
   // let server;
-  //
-  // describe('Check that server is up', () => {
+
   // beforeAll((done) => {
-  // server = require('../server');
-  // done();
-  // });
-  //
-  // it('and running', () => {
-  // expect(server).toBe(0);
-  // });
+    // server = express();
+    // server.listen(4000, () => 'server is listening');
+    // done();
   // });
 
   describe('client request to get all users', () => {
