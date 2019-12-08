@@ -9,6 +9,7 @@ exports.getUsers = (req, res) => {
 
     client.query(query, (queryError, result) => {
       done();
+      console.log(typeof queryError);
       if (queryError) return res.status(400).json({ status: 'error', error: `${queryError}` });
       if (result.rows.length === 0) return res.status(404).json({ status: 'error', error: 'Bad request' });
 
