@@ -43,7 +43,6 @@
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.16.0",
     "eslint-plugin-react-hooks": "^1.7.0",
-    "istanbul": "^0.4.5",
     "jasmine": "^3.5.0",
     "nodemon": "^1.19.4",
     "nyc": "^14.1.1"
