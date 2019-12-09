@@ -7,7 +7,7 @@ describe('User resource', () => {
     let response;
     beforeAll(async () => {
       response = await axios({
-        url: 'https://a12613ab.ngrok.io/api/v1/auth',
+        url: 'https://4d30e53d.ngrok.io/api/v1/auth',
         method: 'GET',
         headers: {
           Authorization: process.env.ADMIN_TOKEN,
