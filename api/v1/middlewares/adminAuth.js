@@ -9,7 +9,7 @@ module.exports = (req, res, next) => {
       const { role } = verifyToken;
 
       if (role !== 'admin') {
-        res.status(403).json({
+        res.status(401).json({
           status: 'error',
           error: 'Bad request: you are not an admin',
         });

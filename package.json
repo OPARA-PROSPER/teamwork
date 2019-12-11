@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "test-init": "node node_modules/jasmine/bin/jasmine init",
-    "test": "istanbul cover jasmine",
+    "test": "nyc --reporter=lcov --reporter=text-summary jasmine",
     "lint": "eslint .",
     "coveralls": "cat ./coverage/lcov.info | node node_modules/.bin/coveralls"
   },
@@ -31,11 +31,11 @@
     "cloudinary": "^1.17.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "jasmine": "^3.5.0",
     "jsonwebtoken": "^8.5.1",
     "pg": "^7.12.1"
   },
   "devDependencies": {
+    "axios": "^0.19.0",
     "coveralls": "^3.0.7",
     "eslint": "^6.6.0",
     "eslint-config-airbnb": "^18.0.1",
@@ -43,11 +43,9 @@
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.16.0",
     "eslint-plugin-react-hooks": "^1.7.0",
-    "istanbul": "^0.4.5",
+    "jasmine": "^3.5.0",
     "nodemon": "^1.19.4",
-    "nyc": "^14.1.1",
-    "request": "^2.88.0",
-    "request-promise": "^4.2.5"
+    "nyc": "^14.1.1"
   },
   "engines": {
     "node": "12.6.0"
