@@ -34,7 +34,8 @@
     "ejs-yield": "^1.0.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
-    "pg": "^7.12.1"
+    "pg": "^7.12.1",
+    "nodemon": "^1.19.4"
   },
   "devDependencies": {
     "axios": "^0.19.0",
@@ -46,7 +47,6 @@
     "eslint-plugin-react": "^7.16.0",
     "eslint-plugin-react-hooks": "^1.7.0",
     "jasmine": "^3.5.0",
-    "nodemon": "^1.19.4",
     "nyc": "^14.1.1"
   },
   "engines": {
