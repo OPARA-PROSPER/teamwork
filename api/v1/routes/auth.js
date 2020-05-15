@@ -12,14 +12,16 @@ const gifsController = require('../controllers/gifsContoller');
 const articlesController = require('../controllers/articlesController');
 
 router.get('/auth', adminAuth, UsersController.getUsers);
-router.post('/auth/create-user', adminAuth, UsersController.createUSer);
+router.post('/auth/signup', UsersController.createUSer);
 router.post('/auth/signin', UsersController.signIn);
+router.get('/auth/user/:id', checkToken, UsersController.getUser);
 
-router.post('/articles', articlesController.postArticles);
+router.post('/articles', checkToken, articlesController.postArticles);
 router.patch('/articles/:id', checkToken, articlesController.patchArticle);
 router.delete('/articles/:id', checkToken, articlesController.deleteArticle);
 router.post('/articles/:id/comment', checkToken, articlesController.commentArticle);
 router.get('/articles/:id', checkToken, articlesController.getArticleById);
+router.get('/:user/articles', checkToken, articlesController.getUserArticles);
 
 router.get('/feed', checkToken, articlesController.getArticles);
 

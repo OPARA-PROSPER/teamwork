@@ -1,6 +1,39 @@
 const jwt = require('jsonwebtoken');
 const pool = require('../db/db');
 
+exports.getUserArticles = (req, res) => {
+  pool.connect((error, client, done) => {
+    if (error) {
+      res.status(400).json({
+        status: 'error',
+        error,
+      });
+    }
+
+    const query = 'SELECT * FROM articles WHERE userid=$1 ORDER BY id ASC';
+
+    client.query(query, [req.params.user], (queryError, result) => {
+      done();
+      if (queryError) {
+        res.status(400).json({
+          status: 'error',
+          error: queryError,
+        });
+      } else if (result.rows === undefined) {
+        res.status(400).json({
+          status: 'error',
+          error: 'resource not found',
+        });
+      } else {
+        res.status(200).json({
+          status: 'success',
+          data: result.rows,
+        });
+      }
+    });
+  });
+};
+
 exports.getArticles = (req, res) => {
   pool.connect((error, client, done) => {
     if (error) {
@@ -90,6 +123,7 @@ exports.getArticleById = (req, res) => {
 };
 
 exports.postArticles = (req, res) => {
+  console.log(req.body);
   pool.connect((err, client, done) => {
     if (err) {
       res.status(400).json({
@@ -98,11 +132,11 @@ exports.postArticles = (req, res) => {
       });
     }
 
-    const token = req.headers.authorization;
+    const token = req.headers.authorization.split(' ')[1];
     const verifyToken = jwt.verify(token, 'TEAMWORK_SECRET_KEY');
-    const { userID } = verifyToken;
-    const query = 'INSERT INTO articles(title, article, userid) VALUES ($1, $2, $3) RETURNING *';
-    const data = [req.body.title, req.body.article, userID];
+    const { userID, name } = verifyToken;
+    const query = 'INSERT INTO articles(title, article, author, userid) VALUES ($1, $2, $3, $4) RETURNING *';
+    const data = [req.body.title, req.body.article, name, userID];
 
     client.query(query, data, (error, result) => {
       done();

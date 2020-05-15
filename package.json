@@ -4,10 +4,10 @@
   "description": "Teamwork is an ​ internal social network for employees of an organization. The goal of this",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "nodemon server.js",
     "test-init": "node node_modules/jasmine/bin/jasmine init",
     "test": "nyc --reporter=lcov --reporter=text-summary jasmine",
-    "lint": "eslint .",
+    "lint": "eslint . --fix",
     "coveralls": "cat ./coverage/lcov.info | node node_modules/.bin/coveralls"
   },
   "repository": {
@@ -30,6 +30,8 @@
     "body-parser": "^1.19.0",
     "cloudinary": "^1.17.0",
     "dotenv": "^8.2.0",
+    "ejs": "^3.1.2",
+    "ejs-yield": "^1.0.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
     "pg": "^7.12.1"
@@ -48,6 +50,6 @@
     "nyc": "^14.1.1"
   },
   "engines": {
-    "node": "12.6.0"
+    "node": "^12.6.0"
   }
 }

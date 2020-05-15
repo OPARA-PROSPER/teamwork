@@ -18,6 +18,24 @@ exports.getUsers = (req, res) => {
   });
 };
 
+exports.getUser = (req, res) => {
+  console.log(req.params);
+  pool.connect((error, client, done) => {
+    if (error) return res.status(400).json({ status: 'error', error });
+
+    const query = 'SELECT id,firstname,lastname,email,gender,jobrole,department,address FROM users WHERE id=$1';
+
+    client.query(query, [req.params.id], (queryError, result) => {
+      done();
+      console.log(typeof queryError);
+      if (queryError) return res.status(400).json({ status: 'error', error: `${queryError}` });
+      if (result.rows.length === 0) return res.status(404).json({ status: 'error', error: 'Bad request' });
+
+      return res.status(200).json({ status: 'success', data: result.rows });
+    });
+  });
+};
+
 exports.createUSer = (req, res) => {
   const data = {
     firstName: req.body.firstname,
@@ -74,7 +92,7 @@ exports.createUSer = (req, res) => {
 };
 
 exports.signIn = (req, res) => {
-  if (Object.keys(req.body).length === 0) return res.status(404).json({ status: 'error', error: 'empty request bidy' });
+  if (Object.keys(req.body).length === 0) return res.status(404).json({ status: 'error', error: 'empty request body' });
 
   pool.connect((error, client, done) => {
     if (error) res.status(400).send({ status: 'error', error });
@@ -98,7 +116,7 @@ exports.signIn = (req, res) => {
 
       return res.status(200).json({
         status: 'success',
-        data: { token, userID: queryResult.rows[0].id },
+        data: { token, userID: queryResult.rows[0].id, role: queryResult.rows[0].jobrole },
       });
     });
   });

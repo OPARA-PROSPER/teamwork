@@ -14,7 +14,7 @@ const normalizePort = (val) => {
   return false;
 };
 
-const port = normalizePort(process.env.PORT || 3000);
+const port = normalizePort(process.env.PORT || 3001);
 app.set('port', port);
 const server = http.createServer(app);
 
@@ -49,6 +49,6 @@ module.exports = server.on('listening', () => {
 });
 
 
-server.listen(process.env.PORT || 3000);
+server.listen(process.env.PORT || 3001);
 
 // module.exports = { server };
