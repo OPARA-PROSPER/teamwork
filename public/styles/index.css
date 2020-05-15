@@ -1,13 +1,12 @@
-@import url('https://fonts.googleapis.com/css2?family=Dosis&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
 body {
   text-align: center;
   background: ghostwhite;
-  font-family: 'Dosis', sans-serif;
   font-size: 16px;
+  font-family: 'Open Sans', sans-serif;
   background: #111;
-  padding: 0;
-  margin: 0;
+  /*padding: 0;*/
+  /*margin: 0;*/
   border: 8px solid #00a878;
   color: #fff;
   padding: 3em 0;
@@ -15,6 +14,16 @@ body {
 .index {
   width: 60%;
   margin: auto;
+  text-align: center;
+}
+.overview {
+  margin-top: 3em;
+}
+h1 {
+  font-size: 60px;
+  font-weight: 900;
+  color: #00a878;
+  margin: 0 auto 1em;
 }
 .content {
   text-align: left;
@@ -33,9 +42,13 @@ body {
 ul {
   list-style: square;
 }
-@media  (max-width: 959px) {
+a {
+  color: #00a878;
+}
+
+@media (width:959px) {
   body {
-    font-size: 20px;
+    font-size: 30px;
   }
   .index {
     width: 90%;
@@ -44,4 +57,4 @@ ul {
   }
 }
 
-@media (min-width: 768px) and (max-width: 992px) {}
+/*@media (min-width: 768px) and (max-width: 992px) {}*/
