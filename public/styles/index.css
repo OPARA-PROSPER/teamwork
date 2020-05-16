@@ -19,7 +19,7 @@ body {
   background: orange;
   padding: 0 .5em;
   margin: 0 .5em;
-  color: #333333;
+  color: #111;
   border-radius: 10px;
 }
 .index {
@@ -88,7 +88,6 @@ i {
 @media (min-width: 768px) and (max-width: 992px) {
   body {
     font-size: 20px;
-    border: none;
   }
   .index {
     width: 90%;

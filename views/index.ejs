@@ -80,7 +80,28 @@
                         GET &nbsp; <a href="http://twk.herokuapp.com/api/v1/auth">http://twk.herokuapp.com/api/v1/auth</a>
                     </div>
                     <p> Making a GET request to this endpoint lists all registered users.</p>
-                    <i>Make sure to add the token generated from login in the <mark>Authorization</mark> header</i>
+                    <i>
+                        Make sure to add the token generated from login in the <mark>Authorization</mark> header and
+                        only an admin user can use this endpoint
+                    </i>
+                </div>
+
+                <div class="endpoint">
+                    <h4># Create articles</h4>
+                    <div class="code-sample">
+                        GET &nbsp; <a href="http://twk.herokuapp.com/api/v1/articles">http://twk.herokuapp.com/api/v1/articles</a>
+                    </div>
+                    <p> Making a POST request to this endpoint stores user article to the DB.</p>
+                    <i>
+                        Make sure to add the token generated from login in the <mark>Authorization</mark> header.
+                    </i>
+                    <div class="code-sample">
+                        <span class="code-comment"># sample request body</span> <br/><br/>
+                        { <br/>
+                        &nbsp; &nbsp;<span class="obj-key">"title"</span> : "Introduction to Teamwork",<br/>
+                        &nbsp; &nbsp;<span class="obj-key">"article"</span> : "Teamwork is an internal social network for employees of an organization.",<br/>
+                        }
+                    </div>
                 </div>
             </div>
             </div>
