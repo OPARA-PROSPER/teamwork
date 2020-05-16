@@ -66,9 +66,10 @@ i {
 @media (min-width: 768px) and (max-width: 992px) {
   body {
     font-size: 20px;
+    border: none;
   }
   .index {
-    width: 80%;
+    width: 90%;
     margin: auto;
   }
 }
