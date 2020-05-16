@@ -46,6 +46,9 @@ hr {
   margin: 1em auto;
   background: #444;
 }
+.code-comment {
+  color: rgba(255, 255, 255, 0.77);
+}
 .obj-key {
   color: orange;
 }
