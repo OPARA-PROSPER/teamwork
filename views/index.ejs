@@ -27,11 +27,11 @@
             <h2>API endpoint documentation</h2>
             <hr/>
             <div class="documentation">
-                <div>
+                <div class="endpoint">
                     <div class="code-sample">
                         POST &nbsp; <a href="http://twk.herokuapp.com/api/v1/auth/signup">http://twk.herokuapp.com/api/v1/auth/signup</a>
                     </div>
-                    <p> Making a POST request this endpoint creates an admin/employee account.</p>
+                    <p> Making a POST request to this endpoint creates an admin/employee account.</p>
                     <i>Make sure to specify if user is an admin/employee in the jobrole key of your JSON body payload</i>
                     <div class="code-sample">
                         <span class="code-comment"># sample request body</span> <br/><br/>
@@ -47,6 +47,21 @@
                          }
                     </div>
                 </div>
+
+                <div class="endpoint">
+                    <div class="code-sample">
+                        POST &nbsp; <a href="http://twk.herokuapp.com/api/v1/auth/signin">http://twk.herokuapp.com/api/v1/auth/signin</a>
+                    </div>
+                    <p> Making a POST request to this endpoint logs users in.</p>
+                    <div class="code-sample">
+                        <span class="code-comment"># sample request body</span> <br/><br/>
+                        { <br/>
+                        &nbsp; &nbsp;<span class="obj-key">"email"</span> : "fiday@gmail.com",<br/>
+                        &nbsp; &nbsp;<span class="obj-key">"password"</span> : "hisquare",<br/>
+                        }
+                    </div>
+                </div>
+            </div>
             </div>
         </div>
     </div>
