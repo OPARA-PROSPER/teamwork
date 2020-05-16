@@ -1,10 +1,12 @@
 <article class="index">
-    <h1>TeamWork</h1>
+    <h1>TEAM WORK</h1>
 
     <div class="content">
-        <h3>
-            Teamwork is an internal social network for employees of an organization.
-        </h3>
+        <div>
+            <h5>
+                Teamwork is an internal social network for employees of an organization.
+            </h5>
+        </div>
 
         <div class="overview">
             <h2>API Overview</h2>
@@ -28,6 +30,7 @@
             <hr/>
             <div class="documentation">
                 <div class="endpoint">
+                    <h4># Register Users</h4>
                     <div class="code-sample">
                         POST &nbsp; <a href="http://twk.herokuapp.com/api/v1/auth/signup">http://twk.herokuapp.com/api/v1/auth/signup</a>
                     </div>
@@ -49,6 +52,7 @@
                 </div>
 
                 <div class="endpoint">
+                    <h4># Login Users</h4>
                     <div class="code-sample">
                         POST &nbsp; <a href="http://twk.herokuapp.com/api/v1/auth/signin">http://twk.herokuapp.com/api/v1/auth/signin</a>
                     </div>
@@ -60,6 +64,14 @@
                         &nbsp; &nbsp;<span class="obj-key">"password"</span> : "hisquare",<br/>
                         }
                     </div>
+                </div>
+
+                <div class="endpoint">
+                    <h4># List all users</h4>
+                    <div class="code-sample">
+                        GET &nbsp; <a href="http://twk.herokuapp.com/api/v1/auth">http://twk.herokuapp.com/api/v1/auth</a>
+                    </div>
+                    <p> Making a GET request to this endpoint lists all registered users.</p>
                 </div>
             </div>
             </div>
