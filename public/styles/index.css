@@ -25,6 +25,13 @@ h1 {
   color: #00a878;
   margin: 0 auto 1em;
 }
+h2 {
+  /*padding: 1em 0;*/
+}
+hr {
+  background: rgba(255, 255, 255, 0.46);
+  margin-bottom: 1.3em;
+}
 .content {
   text-align: left;
 }
@@ -39,11 +46,21 @@ h1 {
   margin: 1em auto;
   background: #444;
 }
+.obj-key {
+  color: orange;
+}
 ul {
   list-style: square;
 }
-a {
+a, a:hover {
   color: #00a878;
+}
+p {
+  margin: 0;
+}
+i {
+  font-size: 14px;
+  margin: 0;
 }
 
 @media (min-width: 768px) and (max-width: 992px) {
