@@ -8,6 +8,7 @@
 
         <div class="overview">
             <h2>API Overview</h2>
+            <hr>
             <ul>
                 <li>Admin can create an employee user account.</li>
                 <li>Admin/Employees can sign in.</li>
@@ -23,14 +24,27 @@
                 <li>Employees can view a specific gif post.</li>
             </ul>
 
+            <h2>API endpoint documentation</h2>
+            <hr/>
             <div class="documentation">
-                <h2>API endpoint documentation</h2>
-                <div class="code-sample">
-                    POST &nbsp; <a href="http://twk.herokuapp.com/api/v1/auth/signup">http://twk.herokuapp.com/api/v1/auth/signup</a>
-                    <br/><br/>
-                    <p>
-                        Entry point for gaining token
-                    </p>
+                <div>
+                    <div class="code-sample">
+                        POST &nbsp; <a href="http://twk.herokuapp.com/api/v1/auth/signup">http://twk.herokuapp.com/api/v1/auth/signup</a>
+                    </div>
+                    <p> Making a POST request this endpoint creates an admin/employee account.</p>
+                    <i>Make sure to specify if user is an admin/employee in the jobrole key of your JSON body payload</i>
+                    <div class="code-sample">
+                        { <br/>
+                        &nbsp; &nbsp;<span class="obj-key">"firstname"</span> : "Praise",<br/>
+                        &nbsp; &nbsp;<span class="obj-key">"lastname"</span> : "Friday",<br/>
+                        &nbsp; &nbsp;<span class="obj-key">"email"</span> : "fiday@gmail.com",<br/>
+                        &nbsp; &nbsp;<span class="obj-key">"password"</span> : "hisquare",<br/>
+                        &nbsp; &nbsp;<span class="obj-key">"gender"</span> : "male",<br/>
+                        &nbsp; &nbsp;<span class="obj-key">"jobrole"</span> : "employee",<br/>
+                        &nbsp; &nbsp;<span class="obj-key">"department"</span> : "IT",<br/>
+                        &nbsp; &nbsp;<span class="obj-key">"address"</span> : "umuahia"<br/>
+                         }
+                    </div>
                 </div>
             </div>
         </div>
